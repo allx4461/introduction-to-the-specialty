@@ -11,11 +11,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/excuse")
 def get_excuse():
     try:
         response = requests.get("https://excuser-three.vercel.app/v1/excuse")
         data = response.json()
         return {"excuse": data[0]['excuse']}
-    except:
+    except Exception:
         return {"excuse": "something went wrong :("}
