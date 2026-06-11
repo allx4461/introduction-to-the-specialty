@@ -26,7 +26,8 @@ std::vector<std::vector<char>> Actor::getSprite() {
 
 
 void Actor::update(World& world){
-    if (!(world.inside(getinfo()[0]+1,getinfo()[1], getinfo()[2],getinfo()[3]))){
+    int next_x = x + v;
+    if (!(world.inside(next_x, y, w, h))){
         v=-v;}
     move();
     }

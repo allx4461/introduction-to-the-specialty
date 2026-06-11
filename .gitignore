@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# C++
+aquarium_app
+*.o
+*.obj
+*.out
+
+# IDEs
+.vscode/
+.idea/
