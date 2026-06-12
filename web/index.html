@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>aquarium</title>
+    <title>ASCII Aquarium</title>
     <style>
         body { 
             background-color: #050505; 
@@ -23,9 +23,21 @@
             margin-bottom: 20px;
             min-height: 300px;
         }
-        .controls { margin-bottom: 20px; }
-        button { padding: 8px 15px; cursor: pointer; background: #222; color: white; border: 1px solid #444; }
+        .controls { 
+            margin-bottom: 20px; 
+            display: flex;
+            gap: 10px;
+        }
+        button { padding: 8px 15px; cursor: pointer; background: #222; color: white; border: 1px solid #444; font-family: 'Courier New', monospace; }
         button:hover { background: #444; }
+        .flush-btn {
+            background: #600;
+            border-color: #900;
+            color: #ff8888;
+        }
+        .flush-btn:hover {
+            background: #900;
+        }
         #chat-container {
             width: 600px;
             border: 2px solid #333;
@@ -80,6 +92,9 @@
         <button onclick="addFish('1')">Fish 1</button>
         <button onclick="addFish('2')">Fish 2</button>
         <button onclick="addFish('3')">Fish 3</button>
+        <button onclick="addFish('4')">Fish 4</button>
+        <button onclick="addFish('5')">Fish 5</button>
+        <button onclick="flushAquarium()" class="flush-btn">Flush</button>
     </div>
 
     <pre id="aquarium">...</pre>
@@ -87,9 +102,9 @@
     <div id="chat-container">
         <div id="chat-box"></div>
         <div class="chat-input-row">
-            <input type="text" id="chat-username" placeholder="Имя (или анонимно)">
-            <input type="text" id="chat-text" placeholder="Введите сообщение...">
-            <button onclick="sendMessage()">Отправить</button>
+            <input type="text" id="chat-username" placeholder="Name (or anonymous)">
+            <input type="text" id="chat-text" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
 
@@ -103,16 +118,23 @@
                 const text = await response.text();
                 document.getElementById('aquarium').innerHTML = text;
             } catch (e) {
-                document.getElementById('aquarium').innerText = "Ошибка: C++ сервер не отвечает";
+                document.getElementById('aquarium').innerText = "Error: C++ server is not responding";
             }
         }
-
 
         async function addFish(id) {
             try {
                 await fetch(`http://${host}:8080/add_fish${id}`);
             } catch (e) {
-                console.error("Не удалось добавить рыбку", e);
+                console.error("Failed to add fish", e);
+            }
+        }
+
+        async function flushAquarium() {
+            try {
+                await fetch(`http://${host}:8080/clear`);
+            } catch (e) {
+                console.error("Failed to flush aquarium", e);
             }
         }
 
@@ -120,7 +142,7 @@
             const usernameInput = document.getElementById('chat-username');
             const textInput = document.getElementById('chat-text');
 
-            const username = usernameInput.value.trim() || 'Аноним';
+            const username = usernameInput.value.trim() || 'Anonymous';
             const text = textInput.value.trim();
 
             if (!text) return;
@@ -138,7 +160,7 @@
                     updateMessages();
                 }
             } catch (e) {
-                console.error("Не удалось отправить сообщение", e);
+                console.error("Failed to send message", e);
             }
         }
 
@@ -166,14 +188,12 @@
                     chatBox.appendChild(div);
                 });
                 
-                // Автопрокрутка вниз при новых сообщениях
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
-                console.error("Не удалось обновить чат", e);
+                console.error("Failed to update chat", e);
             }
         }
 
-        
         setInterval(updateAquarium, 100);
         setInterval(updateMessages, 2000);
         updateMessages();
