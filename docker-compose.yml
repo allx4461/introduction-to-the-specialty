@@ -9,3 +9,9 @@ services:
     ports:
       - "5000:5000"
     restart: always
+
+  frontend:
+    build: ./web
+    ports:
+      - "80:80"
+    restart: always

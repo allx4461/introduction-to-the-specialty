@@ -30,6 +30,53 @@
             font-style: italic;
             max-width: 600px;
             text-align: center;
+            margin-bottom: 20px;
+        }
+        #chat-container {
+            width: 600px;
+            border: 2px solid #333;
+            background: #000;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+        #chat-box {
+            height: 150px;
+            overflow-y: auto;
+            border: 1px solid #222;
+            background: #050505;
+            padding: 10px;
+            text-align: left;
+        }
+        .chat-message {
+            margin-bottom: 8px;
+            word-break: break-all;
+        }
+        .chat-username {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        .chat-text {
+            color: #ffffff;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input-row input[type="text"] {
+            background: #111;
+            color: #00ff00;
+            border: 1px solid #444;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        #chat-username {
+            width: 150px;
+        }
+        #chat-text {
+            flex-grow: 1;
         }
     </style>
 </head>
@@ -44,6 +91,15 @@
     <pre id="aquarium">...</pre>
 
     <div id="excuse-box">...</div>
+
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <div class="chat-input-row">
+            <input type="text" id="chat-username" placeholder="Имя (или анонимно)">
+            <input type="text" id="chat-text" placeholder="Введите сообщение...">
+            <button onclick="sendMessage()">Отправить</button>
+        </div>
+    </div>
 
     <script>
         
@@ -79,10 +135,69 @@
             }
         }
 
+        async function sendMessage() {
+            const usernameInput = document.getElementById('chat-username');
+            const textInput = document.getElementById('chat-text');
+
+            const username = usernameInput.value.trim() || 'Аноним';
+            const text = textInput.value.trim();
+
+            if (!text) return;
+
+            try {
+                const response = await fetch(`http://${host}:5000/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, text })
+                });
+                if (response.ok) {
+                    textInput.value = '';
+                    updateMessages();
+                }
+            } catch (e) {
+                console.error("Не удалось отправить сообщение", e);
+            }
+        }
+
+        async function updateMessages() {
+            try {
+                const response = await fetch(`http://${host}:5000/messages`);
+                const data = await response.json();
+                const chatBox = document.getElementById('chat-box');
+                chatBox.innerHTML = '';
+                
+                data.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'chat-message';
+
+                    const userSpan = document.createElement('span');
+                    userSpan.className = 'chat-username';
+                    userSpan.textContent = msg.username + ": ";
+
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'chat-text';
+                    textSpan.textContent = msg.text;
+
+                    div.appendChild(userSpan);
+                    div.appendChild(textSpan);
+                    chatBox.appendChild(div);
+                });
+                
+                // Автопрокрутка вниз при новых сообщениях
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch (e) {
+                console.error("Не удалось обновить чат", e);
+            }
+        }
+
         
         setInterval(updateAquarium, 100);
         setInterval(updateExcuse, 10000);
+        setInterval(updateMessages, 2000);
         updateExcuse();
+        updateMessages();
     </script>
 </body>
 </html>

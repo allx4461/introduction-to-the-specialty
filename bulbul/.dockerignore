@@ -1,0 +1,4 @@
+aquarium_app
+*.o
+Dockerfile
+.dockerignore
