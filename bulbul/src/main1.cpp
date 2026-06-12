@@ -90,6 +90,12 @@ int main() {
         res.set_header("Access-Control-Allow-Origin", "*");
         res.set_content("Рыбка добавлена!", "text/plain; charset=utf-8");
     });
+    svr.Get("/clear", [&](const httplib::Request& req, httplib::Response& res) {
+        std::lock_guard<std::mutex> lock(world_mutex);
+        world.clear();
+        res.set_header("Access-Control-Allow-Origin", "*");
+        res.set_content("Cleared!", "text/plain; charset=utf-8");
+    });
 
     //
     std::cout << "Aquarium server started at http://localhost:8080" << std::endl;
