@@ -39,7 +39,10 @@ def get_messages():
 @app.get("/excuse")
 def get_excuse():
     try:
-        response = requests.get("https://excuser-three.vercel.app/v1/excuse")
+        response = requests.get(
+            "https://excuser-three.vercel.app/v1/excuse",
+            timeout=5.0
+        )
         data = response.json()
         return {"excuse": data[0]['excuse']}
     except Exception:
