@@ -26,13 +26,6 @@
         .controls { margin-bottom: 20px; }
         button { padding: 8px 15px; cursor: pointer; background: #222; color: white; border: 1px solid #444; }
         button:hover { background: #444; }
-        #excuse-box {
-            color: #ffcc00;
-            font-style: italic;
-            max-width: 600px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
         #chat-container {
             width: 600px;
             border: 2px solid #333;
@@ -44,7 +37,7 @@
             box-sizing: border-box;
         }
         #chat-box {
-            height: 150px;
+            height: 350px;
             overflow-y: auto;
             border: 1px solid #222;
             background: #050505;
@@ -91,8 +84,6 @@
 
     <pre id="aquarium">...</pre>
 
-    <div id="excuse-box">...</div>
-
     <div id="chat-container">
         <div id="chat-box"></div>
         <div class="chat-input-row">
@@ -122,17 +113,6 @@
                 await fetch(`http://${host}:8080/add_fish${id}`);
             } catch (e) {
                 console.error("Не удалось добавить рыбку", e);
-            }
-        }
-
-        
-        async function updateExcuse() {
-            try {
-                const response = await fetch(`http://${host}:5000/excuse`);
-                const data = await response.json();
-                document.getElementById('excuse-box').innerText = "Оправдание дня: " + data.excuse;
-            } catch (e) {
-                document.getElementById('excuse-box').innerText = "Python-сервис отдыхает...";
             }
         }
 
@@ -195,9 +175,7 @@
 
         
         setInterval(updateAquarium, 100);
-        setInterval(updateExcuse, 10000);
         setInterval(updateMessages, 2000);
-        updateExcuse();
         updateMessages();
     </script>
 </body>
