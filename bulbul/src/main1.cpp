@@ -50,7 +50,7 @@ int main() {
             world.render(canvas);
         }
         res.set_header("Access-Control-Allow-Origin", "*"); // Чтобы браузер не ругался
-        res.set_content(canvas.getFrameAsString(), "text/plain; charset=utf-8");
+        res.set_content(canvas.getFrameAsString(), "text/html; charset=utf-8");
     });
     //
     svr.Get("/add_fish1", [&](const httplib::Request& req, httplib::Response& res) {
