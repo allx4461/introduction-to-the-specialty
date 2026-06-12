@@ -10,10 +10,11 @@
 
 ```mermaid
 graph TD
-    User([Браузер пользователя]) -->|1. Запрос HTML/JS (порт 80)| Frontend[Контейнер Nginx: Frontend]
-    User -->|2. Анимация аквариума (порт 8080)| BackendCPP[Контейнер C++: Bulbul]
-    User -->|3. Оправдания и чат (порт 5000)| BackendPy[Контейнер Python: Informer]
-    BackendPy -->|4. Внешний запрос| ExternalAPI[Внешнее API оправданий]
+    User([Браузер пользователя]) -->|"1. Запрос HTML/JS (порт 80)"| Frontend["Контейнер Nginx: Frontend"]
+    User -->|"2. Анимация аквариума (порт 8080)"| BackendCPP["Контейнер C++: Bulbul"]
+    User -->|"3. Оправдания и чат (порт 5000)"| BackendPy["Контейнер Python: Informer"]
+    BackendPy -->|"4. Внешний запрос"| ExternalAPI["Внешнее API оправданий"]
+
 
     subgraph Docker Compose Network
         Frontend
