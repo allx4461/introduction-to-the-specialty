@@ -50,9 +50,7 @@ int main() {
             world.render(canvas);
         }
         res.set_header("Access-Control-Allow-Origin", "*"); // Чтобы браузер не ругался
-        res.set_content(canvas.getFrameAsString(), "text/html");
-        std::string beautiful_frame = "<pre>" + canvas.getFrameAsString() + "</pre>";
-        res.set_content(beautiful_frame, "text/html");
+        res.set_content(canvas.getFrameAsString(), "text/html; charset=utf-8");
     });
     //
     svr.Get("/add_fish1", [&](const httplib::Request& req, httplib::Response& res) {

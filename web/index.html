@@ -49,7 +49,7 @@
             box-sizing: border-box;
         }
         #chat-box {
-            height: 350px;
+            height: 300px;
             overflow-y: auto;
             border: 1px solid #222;
             background: #050505;
@@ -111,12 +111,16 @@
     <script>
         
         const host = window.location.hostname || 'localhost';
+        let lastFrame = '';
 
         async function updateAquarium() {
             try {
                 const response = await fetch(`http://${host}:8080/get_frame`);
                 const text = await response.text();
-                document.getElementById('aquarium').innerHTML = text;
+                if (text !== lastFrame) {
+                    document.getElementById('aquarium').innerHTML = text;
+                    lastFrame = text;
+                }
             } catch (e) {
                 document.getElementById('aquarium').innerText = "Error: C++ server is not responding";
             }
@@ -194,7 +198,7 @@
             }
         }
 
-        setInterval(updateAquarium, 100);
+        setInterval(updateAquarium, 75);
         setInterval(updateMessages, 2000);
         updateMessages();
     </script>
