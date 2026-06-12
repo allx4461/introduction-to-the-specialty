@@ -37,3 +37,8 @@ jobs:
       run: |
         cd bulbul
         g++ -std=c++17 src/*.cpp -o aquarium_app -pthread
+    - name: Run C++ Unit Tests
+      run: |
+          cd bulbul
+          g++ -std=c++17 -Isrc src/world.cpp src/actor.cpp src/entity.cpp src/fishes.cpp src/canvas.cpp src/bubble.cpp tests/test_world.cpp -o run_tests -pthread
+          ./run_tests
